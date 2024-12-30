@@ -12,34 +12,42 @@ model User {
   email     String   @unique
   password  String
   name      String?
+  weight    Float?
+  height    Float?
+  age       Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Diary Diary[]
-
+  DiaryRecord DiaryRecord[]
+  
   @@map(name: "users")
 }
 
 model Product {
   id        Int   @id @default(autoincrement())
   name      String
-  carbon    Float
+  carbs    Float
   fat       Float
   protein   Float
   calories  Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  DiaryRecord DiaryRecord[]
+
   @@map(name: "products")
 }
 
-model Diary {
+model DiaryRecord {
   id        Int   @id @default(autoincrement())
-  date      DateTime
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  userId   Int
+  productId Int
+  weight  Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map(name: "diaries")
+  user    User   @relation(fields: [userId], references: [id])
+  product  Product @relation(fields: [productId], references: [id])
+
+  @@map(name: "diary_records")
 }
