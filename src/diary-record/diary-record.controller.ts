@@ -37,6 +37,12 @@ export class DiaryRecordController {
     const data = { weight, userId, productId };
     return this.diaryRecordService.createDiaryRecord(data);
   }
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get daily records' })
+  @ApiOkResponse({
+    description: 'List of daily diary records',
+    type: [DiaryRecordResponseDto],
+  })
   @Get('')
   async getDiaryRecords(@GetUser('id') userId: number) {
     if (!userId) {
