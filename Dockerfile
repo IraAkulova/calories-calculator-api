@@ -1,8 +1,6 @@
-# Dockerfile
+FROM node:20
 
-FROM node
-
-WORKDIR /usr/src/main
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
@@ -12,4 +10,6 @@ COPY . .
 
 RUN npm run build
 
-CMD ["node", "dist/main.js"]
+EXPOSE 3334
+
+CMD ["npm", "run", "start:prod"]

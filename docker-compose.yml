@@ -8,16 +8,47 @@ services:
       POSTGRES_DB: calculator
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: 123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d calculator"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
 
   nestjs-api:
     build:
-      context: . 
-    ports:
-      - 3334:3334
-    depends_on:
-      - dev-db
+      context: .
+      dockerfile: Dockerfile
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
-    env_file:
-      - .env 
+    depends_on:
+      - dev-db
+    ports:
+      - "3334:3334"
+    networks:
+      - app_network
+    command: ["npm", "run", "start:dev"]
+
+  prisma:
+    image: node:20
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - DATABASE_URL=postgresql://myuser:123@dev-db:5432/calculator?schema=public
+    command: ["npx", "prisma", "migrate", "deploy"]
+    depends_on:
+      - dev-db
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
