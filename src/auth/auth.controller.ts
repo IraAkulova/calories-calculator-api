@@ -23,9 +23,9 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Create user' })
+  @ApiOperation({ summary: 'Login user' })
   @ApiCreatedResponse({
-    description: 'User created',
+    description: 'User logged in',
     type: AuthResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid data' })
@@ -35,9 +35,9 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Login user' })
+  @ApiOperation({ summary: 'Create user' })
   @ApiOkResponse({
-    description: 'User logged in',
+    description: 'User created',
     type: AuthResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid data' })
