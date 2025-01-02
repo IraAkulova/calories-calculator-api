@@ -39,7 +39,7 @@ services:
     volumes:
       - .:/usr/src/app
     environment:
-      - DATABASE_URL=postgresql://myuser:123@dev-db:5432/calculator?schema=public
+      - DATABASE_URL=${DATABASE_URL}
     command: ["npx", "prisma", "migrate", "deploy"]
     depends_on:
       - dev-db
